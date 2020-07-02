@@ -3,6 +3,8 @@ from utils.response import APIResponse
 from rest_framework.views import APIView
 from django.contrib.auth.models import Group, Permission  # 导入 角色 与 权限
 from api.authentications import MyAuth  # 导入自定义认证模块
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly # 导入权限模块
+from api.permissions import MyPermission # 导入自定义权限模块
 from rest_framework.request import Request
 from rest_framework import settings
 
@@ -43,5 +45,28 @@ class TestAPIView(APIView):
 
         return APIResponse("OK")
 
+# 全局设置 权限
+class TestPermissionAPIView(APIView):
+    """
+    只有认证后的才可以访问
+    """
+    authentication_classes = [MyAuth]
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request, *args, **kwargs):
+        return APIResponse("登录访问成功")
+
+# 局部设置 权限
+class UserLoginOrReadOnly(APIView):
+    """
+    登录可写  游客只读
+    """
+    authentication_classes = [MyAuth] #认证
+    # permission_classes = [IsAuthenticatedOrReadOnly]  # 全局权限 无认证，只能读
+    permission_classes = [MyPermission]                  # 自定义权限 无认证，只能读
+    def get(self, request, *args, **kwargs):
+        return APIResponse("读操作访问成功")
+
+    def post(self, request, *args, **kwargs):
+        return APIResponse("写操作")
 

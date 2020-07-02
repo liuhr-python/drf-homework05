@@ -136,6 +136,10 @@ REST_FRAMEWORK = {
         # 全局配置自定义认证器
         # 'api.authentications.MyAuth',
     ],
+    # 权限类配置
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
 
 }
 # # 静态资源的目录
