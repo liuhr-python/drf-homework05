@@ -129,6 +129,14 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     # 全局异常处理的方法
     'EXCEPTION_HANDLER': 'utils.exceptions.exception_handler',  # 使用自定的异常
+    # 系统默认的认证器配置
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.SessionAuthentication',  # 基于会话
+        # 'rest_framework.authentication.BasicAuthentication',     # Basic
+        # 全局配置自定义认证器
+        # 'api.authentications.MyAuth',
+    ],
+
 }
 # # 静态资源的目录
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
