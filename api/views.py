@@ -4,7 +4,9 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import Group, Permission  # 导入 角色 与 权限
 from api.authentications import MyAuth  # 导入自定义认证模块
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly # 导入权限模块
+from rest_framework.throttling import UserRateThrottle  # 导入频率模块
 from api.permissions import MyPermission # 导入自定义权限模块
+from api.throttle import SendMessageRate  # 导入自定义频率模块
 from rest_framework.request import Request
 from rest_framework import settings
 
@@ -70,3 +72,12 @@ class UserLoginOrReadOnly(APIView):
     def post(self, request, *args, **kwargs):
         return APIResponse("写操作")
 
+class SendMessageAPIView(APIView):
+
+    # throttle_classes = [UserRateThrottle]  # 系统频率   默认scope = "user"
+    throttle_classes = [SendMessageRate ]  # 自定义频率   默认scope = "send"
+    def get(self, request, *args, **kwargs):
+        return APIResponse("读操作访问成功")
+
+    def post(self, request, *args, **kwargs):
+        return APIResponse("写操作")
